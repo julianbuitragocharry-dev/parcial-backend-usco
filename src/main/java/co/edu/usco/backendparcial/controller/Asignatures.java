@@ -50,6 +50,13 @@ public class Asignatures {
         return "asignature_update";
     }
 
+    @GetMapping("/edit/{id}")
+    public String editAsignature(@PathVariable Long id, Model model) {
+        AsignatureEntity asignature = asignatureService.getAsignatureById(id);
+        model.addAttribute("asignatura", asignature);
+        return "asignature_update";
+    }
+
     @PostMapping("/edit/{id}")
     public String updateAsignature(@PathVariable Long id, @ModelAttribute AsignatureEntity asignatureDetails) {
         asignatureService.updateAsignature(id, asignatureDetails);
