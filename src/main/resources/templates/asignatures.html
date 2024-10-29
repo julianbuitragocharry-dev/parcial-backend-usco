@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Asignaturas</title>
+    <meta charset="UTF-8">
+    <title>Lista de Asignaturas</title>
 </head>
 <body>
+<nav>
+    <a href="/asignatures">Lista de Asignaturas</a> |
+    <form action="#" th:action="@{/logout}" method="post" style="display: inline;">
+        <button type="submit">Cerrar sesión</button>
+    </form>
+</nav>
 <h1>Lista de Asignaturas</h1>
+
+<div sec:authorize="hasAuthority('ADMIN')">
+    <a href="/asignatures/new">Agregar Nueva Asignatura</a>
+</div>
+
 <table>
     <thead>
     <tr>
@@ -14,6 +26,7 @@
         <th>Horario de Inicio</th>
         <th>Horario de Fin</th>
         <th>Docente Encargado</th>
+        <th sec:authorize="hasAuthority('ADMIN')">Acciones</th>
     </tr>
     </thead>
     <tbody>
@@ -21,9 +34,22 @@
         <td th:text="${asignatura.name}">Nombre de la asignatura</td>
         <td th:text="${asignatura.description}">Descripción</td>
         <td th:text="${asignatura.classroom}">Salón</td>
-        <td th:text="${asignatura.start}">Horario de Inicio</td>
-        <td th:text="${asignatura.end}">Horario de Fin</td>
-        <td th:text="${asignatura.professor}">Docente Encargado</td>
+        <td th:text="${asignatura.startTime}">Horario de Inicio</td>
+        <td th:text="${asignatura.endTime}">Horario de Fin</td>
+        <td th:text="${asignatura.professor.name}">Docente Encargado</td>
+        <td>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{/asignatures/edit/{id}(id=${asignatura.id})}">Editar</a> |
+                <a th:href="@{/asignatures/delete/{id}(id=${asignatura.id})}"
+                   onclick="return confirm('¿Estás seguro de que deseas eliminar esta asignatura?')">Eliminar</a>
+            </div>
+
+            <div sec:authorize="hasAuthority('DOCENTE')">
+                <sec:authorize access="${asignatura.professor.id == userDetails.id}">
+                    <a th:href="@{/asignatures/edit/{id}(id=${asignatura.id})}">Editar</a>
+                </sec:authorize>
+            </div>
+        </td>
     </tr>
     </tbody>
 </table>

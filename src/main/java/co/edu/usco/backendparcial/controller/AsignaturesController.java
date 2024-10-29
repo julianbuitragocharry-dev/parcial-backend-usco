@@ -17,4 +17,6 @@ public class AsignaturesController {
     public List<AsignatureEntity> getAllAsignatures() {
         return asignatureService.getAllAsignatures();
     }
+
+
 }
