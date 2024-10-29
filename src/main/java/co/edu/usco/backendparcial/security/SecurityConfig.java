@@ -26,6 +26,7 @@ public class SecurityConfig {
             throws Exception {
         return http
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(HttpMethod.GET ,"/api/asignatures").hasAnyAuthority("ADMIN", "DOCENTE", "ESTUDIANTE");
                     auth.requestMatchers(HttpMethod.GET ,"/asignatures").hasAnyAuthority("ADMIN", "DOCENTE", "ESTUDIANTE");
                     auth.requestMatchers("/asignatures/**").hasAuthority("ADMIN");
                     auth.requestMatchers("/asignatures/edit/**").hasAuthority("DOCENTE");
